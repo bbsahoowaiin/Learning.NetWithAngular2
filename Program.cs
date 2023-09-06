@@ -1,4 +1,6 @@
 using API.Data;
+using API.Interfaces;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,14 @@ builder.Services.AddDbContext<DataContext>(opt => {
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
+builder.Services.AddCors();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
